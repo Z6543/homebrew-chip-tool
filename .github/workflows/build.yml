@@ -56,6 +56,10 @@ jobs:
           else
             echo "Building for ${{ matrix.os }} ${{ matrix.arch }}"
             # Normal build commands
+            cd connectedhomeip
+            ./scripts/checkout_submodules.py --shallow --platform darwin
+            source scripts/activate.sh
+            ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
           fi
 
       # Upload artifact
@@ -64,6 +68,7 @@ jobs:
         with:
           name: chip-tool-${{ matrix.os }}-${{ matrix.arch }}
           path: connectedhomeip/out/chip-tool/chip-tool
+          if-no-files-found: err
 
       - name: Create GitHub Release
         id: create_release
