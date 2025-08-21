@@ -3,6 +3,8 @@ name: Build chip-tool
 on:
   push:
     branches: [ main ]
+    paths:
+      - .github/workflows/build.yml
   workflow_dispatch:
 
 jobs:
@@ -14,11 +16,14 @@ jobs:
       with:
         submodules: true
 
-    - name: Checkout connectedhomeip v1.4.2.0
+    - name: Set CHIP ref
+      run: echo "CHIP_REF=v1.4.2.0" >> $GITHUB_ENV
+
+    - name: Checkout connectedhomeip 
       uses: actions/checkout@v4
       with:
         repository: project-chip/connectedhomeip
-        ref: refs/tags/v1.4.2.0
+        ref: refs/tags/${{ env.CHIP_REF }}
         path: connectedhomeip
 
     - name: Install dependencies
@@ -37,14 +42,14 @@ jobs:
         name: chip-tool
         path: connectedhomeip/out/chip-tool/chip-tool
 
-    - name: Create GitHub Release 
+    - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        tag_name: ${{ env.CHIP_REF }}
+        release_name: Release ${{ env.CHIP_REF }}
         draft: false
         prerelease: false
 
