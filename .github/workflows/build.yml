@@ -22,7 +22,7 @@ jobs:
         source scripts/activate.sh
         ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: chip-tool
         path: out/chip-tool/chip-tool
