@@ -14,6 +14,6 @@ class ChipTool < Formula
   end
 
   test do
-    system "#{bin}/chip-tool", "pairing", "onnetwork", "1", "20202021"
+    system "#{bin}/chip-tool", "pairing", "onnetwork", "1", "20202021" 
   end
 end
