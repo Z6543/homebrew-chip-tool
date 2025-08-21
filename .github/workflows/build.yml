@@ -1,0 +1,28 @@
+name: Build chip-tool
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Install dependencies
+      run: |
+        brew install python ninja gn llvm
+
+    - name: Build chip-tool
+      run: |
+        source scripts/activate.sh
+        ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: chip-tool
+        path: out/chip-tool/chip-tool
