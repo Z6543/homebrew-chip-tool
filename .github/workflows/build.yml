@@ -79,6 +79,13 @@ jobs:
           path: connectedhomeip/out/chip-tool/chip-tool
           if-no-files-found: error
 
+      - name: Create and push tag
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag ${{ env.CHIP_REF }}
+          git push origin ${{ env.CHIP_REF }}
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -99,3 +106,5 @@ jobs:
           asset_path: connectedhomeip/out/chip-tool/chip-tool
           asset_name: chip-tool
           asset_content_type: application/octet-stream
+
+
