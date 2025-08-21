@@ -37,7 +37,7 @@ jobs:
         name: chip-tool
         path: connectedhomeip/out/chip-tool/chip-tool
 
-    - name: Create GitHub Release
+    - name: Create GitHub Release 
       id: create_release
       uses: actions/create-release@v1
       env:
