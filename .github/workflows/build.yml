@@ -53,11 +53,18 @@ jobs:
             # Use cross-compiler or Docker for arm64
             echo "Cross-compiling for linux-arm64"
             # Example: use a Docker image or set CC/CXX to aarch64-linux-gnu-gcc
-          else
+          else if [ "${{ matrix.os }}" = "macos-latest" ] && [ "${{ matrix.arch }}" = "arm64" ]; then
             echo "Building for ${{ matrix.os }} ${{ matrix.arch }}"
             # Normal build commands
             cd connectedhomeip
             ./scripts/checkout_submodules.py --shallow --platform darwin
+            source scripts/activate.sh
+            ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
+          else if [ "${{ matrix.os }}" = "ubuntu-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
+            echo "Building for ${{ matrix.os }} ${{ matrix.arch }}"
+            # Normal build commands
+            cd connectedhomeip
+            ./scripts/checkout_submodules.py --shallow --platform linux
             source scripts/activate.sh
             ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
           fi
