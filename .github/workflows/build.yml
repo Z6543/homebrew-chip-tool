@@ -27,6 +27,7 @@ jobs:
 
     - name: Build chip-tool
       run: |
+        cd connectedhomeip
         source scripts/activate.sh
         ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
     - name: Upload artifact
