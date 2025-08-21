@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: chip-tool-${{ matrix.os }}-${{ matrix.arch }}
-          path: path/to/binary
+          path: connectedhomeip/out/chip-tool/chip-tool
 
       - name: Create GitHub Release
         id: create_release
