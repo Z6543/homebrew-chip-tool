@@ -2,6 +2,5 @@
 
 # macOS install
 ```
-brew tap Z6543/homebrew-chip-tool
-brew install chip-tool
+brew install Z6543/chip-tool/chip-tool
 ```
