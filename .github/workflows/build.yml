@@ -9,56 +9,75 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        arch: [x64, arm64]
+        exclude:
+          - os: macos-latest
+            arch: x64  # macos-latest runner is x64 only
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: true
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Set CHIP ref
-      run: echo "CHIP_REF=v1.4.2.0" >> $GITHUB_ENV
+      - name: Set CHIP ref
+        run: echo "CHIP_REF=v1.4.2.0" >> $GITHUB_ENV
 
-    - name: Checkout connectedhomeip 
-      uses: actions/checkout@v4
-      with:
-        repository: project-chip/connectedhomeip
-        ref: refs/tags/${{ env.CHIP_REF }}
-        path: connectedhomeip
+      - name: Checkout connectedhomeip 
+        uses: actions/checkout@v4
+        with:
+          repository: project-chip/connectedhomeip
+          ref: refs/tags/${{ env.CHIP_REF }}
+          path: connectedhomeip
 
-    - name: Install dependencies
-      run: |
-        brew install python ninja llvm
+      - name: Install dependencies
+        run: |
+          brew install python ninja llvm
 
-    - name: Build chip-tool
-      run: |
-        cd connectedhomeip
-        ./scripts/checkout_submodules.py --shallow --platform darwin
-        source scripts/activate.sh
-        ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: chip-tool
-        path: connectedhomeip/out/chip-tool/chip-tool
+      # For Linux arm64, set up QEMU for cross-compilation
+      - name: Set up QEMU
+        if: matrix.os == 'ubuntu-latest' && matrix.arch == 'arm64'
+        uses: docker/setup-qemu-action@v3
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.CHIP_REF }}
-        release_name: Release ${{ env.CHIP_REF }}
-        draft: false
-        prerelease: false
+      # Build step (adapt for your build system)
+      - name: Build chip-tool
+        run: |
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ] && [ "${{ matrix.arch }}" = "arm64" ]; then
+            # Use cross-compiler or Docker for arm64
+            echo "Cross-compiling for linux-arm64"
+            # Example: use a Docker image or set CC/CXX to aarch64-linux-gnu-gcc
+          else
+            echo "Building for ${{ matrix.os }} ${{ matrix.arch }}"
+            # Normal build commands
+          fi
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: connectedhomeip/out/chip-tool/chip-tool
-        asset_name: chip-tool
-        asset_content_type: application/octet-stream
+      # Upload artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chip-tool-${{ matrix.os }}-${{ matrix.arch }}
+          path: path/to/binary
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.CHIP_REF }}
+          release_name: Release ${{ env.CHIP_REF }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: connectedhomeip/out/chip-tool/chip-tool
+          asset_name: chip-tool
+          asset_content_type: application/octet-stream
