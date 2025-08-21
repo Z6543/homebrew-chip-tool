@@ -120,13 +120,12 @@ jobs:
           prerelease: false
 
       - name: Upload all binaries to release
-        uses: actions/upload-release-asset@v1
+        run: |
+          for file in ./artifacts/**/chip-tool; do
+            echo "Uploading $file"
+            gh release upload ${{ env.CHIP_REF }} "$file" --clobber
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/connectedhomeip/out/chip-tool/chip-tool-*
-          asset_name: chip-tool-${{ env.CHIP_REF }}-${{ matrix.os }}-${{ matrix.arch }}
-          asset_content_type: application/octet-stream
 
 
