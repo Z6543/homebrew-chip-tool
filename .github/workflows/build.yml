@@ -88,6 +88,9 @@ jobs:
         with:
           path: ./artifacts
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Create and push tag
         run: |
           git config user.name "${{ github.actor }}"
