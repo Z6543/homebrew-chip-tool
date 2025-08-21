@@ -115,7 +115,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/chip-tool-*
+          asset_path: ./artifacts/connectedhomeip/out/chip-tool/chip-tool-*
           asset_name: chip-tool-${{ env.CHIP_REF }}-${{ matrix.os }}-${{ matrix.arch }}
           asset_content_type: application/octet-stream
 
