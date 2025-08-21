@@ -5,7 +5,6 @@ class ChipTool < Formula
   version "v1.4.2.0"
   depends_on "python@3.11"
   depends_on "ninja"
-  depends_on "gn"
   depends_on "llvm"
 
   def install
