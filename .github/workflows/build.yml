@@ -28,6 +28,15 @@ jobs:
         with:
           submodules: true
 
+      - name: Cache chip-tool build
+        uses: actions/cache@v4
+        with:
+          path: connectedhomeip/out/chip-tool
+          key: chip-tool-${{ runner.os }}-${{ env.CHIP_REF }}-${{ hashFiles('connectedhomeip/**') }}
+          restore-keys: |
+            chip-tool-${{ runner.os }}-${{ env.CHIP_REF }}-
+
+
       - name: Checkout connectedhomeip 
         uses: actions/checkout@v4
         with:
@@ -70,6 +79,7 @@ jobs:
             source scripts/activate.sh
             ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
           fi
+
 
       # Upload artifact
       - name: Upload artifact
