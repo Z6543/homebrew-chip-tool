@@ -28,6 +28,7 @@ jobs:
     - name: Build chip-tool
       run: |
         cd connectedhomeip
+        ./scripts/checkout_submodules.py --shallow --platform darwin
         source scripts/activate.sh
         ./scripts/examples/gn_build_example.sh examples/chip-tool out/chip-tool
     - name: Upload artifact
