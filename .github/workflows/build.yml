@@ -121,8 +121,8 @@ jobs:
 
       - name: Upload all binaries to release
         run: |
-          ls -alR ./
-          for file in ./chip-tool*; do
+          ls -alR /home/runner/work/homebrew-chip-tool/homebrew-chip-tool/
+          for file in /home/runner/work/homebrew-chip-tool/homebrew-chip-tool/artifacts/*; do
             echo "Uploading $file"
             gh release upload ${{ env.CHIP_REF }} "$file" --clobber
           done
