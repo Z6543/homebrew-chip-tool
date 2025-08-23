@@ -123,10 +123,14 @@ jobs:
       - name: Upload all binaries to release
         run: |
           ls -alR ./
-          for file in ./artifacts/*; do
-            echo "Uploading $file"
-            gh release upload ${{ env.CHIP_REF }} "$file" --clobber
-          done
+          #for file in ./artifacts/*; do
+          mv ./artifacts/chip-tool-macos-latest-arm64/chip-tool ./artifacts/chip-tool-macos-latest-arm64/chip-tool-macos-latest-arm64
+          mv ./artifacts/chip-tool-ubuntu-latest-x64/chip-tool ./artifacts/chip-tool-ubuntu-latest-x64/chip-tool-ubuntu-latest-x64
+          
+          #echo "Uploading $file"
+          gh release upload ${{ env.CHIP_REF }} "./artifacts/chip-tool-macos-latest-arm64/chip-tool-macos-latest-arm64" --clobber
+          gh release upload ${{ env.CHIP_REF }} "./artifacts/chip-tool-ubuntu-latest-x64/chip-tool-ubuntu-latest-x64" --clobber
+          # done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
