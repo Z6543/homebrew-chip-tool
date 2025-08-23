@@ -93,13 +93,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Download all build artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
       - name: Create and push tag
         run: |
@@ -121,8 +122,8 @@ jobs:
 
       - name: Upload all binaries to release
         run: |
-          ls -alR /home/runner/work/homebrew-chip-tool/homebrew-chip-tool/
-          for file in /home/runner/work/homebrew-chip-tool/homebrew-chip-tool/artifacts/*; do
+          ls -alR ./
+          for file in ./artifacts/*; do
             echo "Uploading $file"
             gh release upload ${{ env.CHIP_REF }} "$file" --clobber
           done
