@@ -18,10 +18,10 @@ class ChipTool < Formula
   def install
     if Hardware::CPU.intel?
       # system "unzip", "chip-tool-macOS-universal.bin.zip"
-      # mv "chip-tool-macOS-universal.bin", "chip-tool"
+      mv "chip-tool-macOS-universal.bin", "chip-tool"
       bin.install "chip-tool"
     else
-      # mv "chip-tool-macos-latest-arm64", "chip-tool"
+      mv "chip-tool-macos-latest-arm64", "chip-tool"
       bin.install "chip-tool"
     end
   end
