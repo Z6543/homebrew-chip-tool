@@ -28,13 +28,13 @@ jobs:
         with:
           submodules: true
 
-      - name: Cache chip-tool build
-        uses: actions/cache@v4
-        with:
-          path: connectedhomeip/out/chip-tool
-          key: chip-tool-${{ runner.os }}-${{ env.CHIP_REF }}-${{ hashFiles('connectedhomeip/**') }}
-          restore-keys: |
-            chip-tool-${{ runner.os }}-${{ env.CHIP_REF }}-
+#      - name: Cache chip-tool build
+#        uses: actions/cache@v4
+#        with:
+#          path: connectedhomeip/out/chip-tool
+#          key: chip-tool-${{ runner.os }}-${{ env.CHIP_REF }}-${{ hashFiles('connectedhomeip/**') }}
+#          restore-keys: |
+#            chip-tool-${{ runner.os }}-${{ env.CHIP_REF }}-
 
 
       - name: Checkout connectedhomeip 
